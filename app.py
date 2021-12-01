@@ -1,6 +1,6 @@
-from flask import Flask
+from flask import Flask, request
 from flask_restful import reqparse, Api, Resource
-from flask-mysqldb import MySQL
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 

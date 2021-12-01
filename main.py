@@ -1,7 +1,6 @@
-import pymysql
-from dbconfig import MySql
 from app import app
 from flask import Flask, jsonify, request
+from flask_mysqldb import MySQL
 
 # CRUD operation: ADD
 @app.route('/add', methods=['POST'])
@@ -15,7 +14,7 @@ def add_contact():
         if Contact_name and Contact_email and Contact_phone_number and request.method == 'POST':
             SQL_Query = "INSERT INTO contacts(Contact_name, Contact_email, Contact_phone_number) VALUES(%s, %s, %s)"
             data = (Contact_name, Contact_email, Contact_phone_number,)
-            connection = MySql.connect()
+            connection = MySQL.connection()
             Pointer = connection.cursor()
             Pointer.execute(SQL_Query, data)
             connection.commit()
