@@ -31,3 +31,12 @@ class Contact(db.Model):
         return '' % self.id
 db.create_all()
 
+class ContactSchema(ModelSchema):
+    class Meta(ModelSchema.Meta):
+        model = Contact
+        sqla_session = db.session
+    id = fields.Number(dump_only=True)
+    first_name = fields.String(required=True)
+    last_name = fields.String(required=True)
+    email = fields.String(required=True)
+    phone_number = fields.String(required=True)
