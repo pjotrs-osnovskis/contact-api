@@ -19,15 +19,6 @@ class Contact(db.Model):
     email = db.Column(db.String(100))
     phone_number = db.Column(db.String(10))
 
-    def create(self):
-        db.session.add(self)
-        db.session.commit()
-        return self
-    def __init__(self,first_name,last_name,email,phone_number):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.email = email
-        self.phone_number = phone_number
     def __repr__(self):
         return '' % self.id
 db.create_all()
@@ -43,9 +34,22 @@ contact_schema = ContactSchema()
 contacts_schema = ContactSchema(many=True)
 
 class ContactListResource(Resource):
+    #### CRUD - GET (READ) ####
     def get(self):
         contacts = Contact.query.all()
         return contacts_schema.dump(contacts)
+
+    #### CRUD - ADD (CREATE) ####
+    def post(self):
+        new_contact = Contact(
+            first_name=request.json['first_name'],
+            last_name=request.json['last_name'],
+            email=request.json['email'],
+            phone_number=request.json['phone_number']
+        )
+        db.session.add(new_contact)
+        db.session.commit()
+        return contact_schema.dump(new_contact)
 
 api.add_resource(ContactListResource, '/contacts')
 
