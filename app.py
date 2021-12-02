@@ -75,7 +75,8 @@ class ContactResource(Resource):
 
         db.session.commit()
         return contact_schema.dump(contact)
-    
+
+    #### CRUD - DELETE (DELETE) ####
     def delete(self, contact_id):
         contact = Contact.query.get_or_404(contact_id)
         db.session.delete(contact)
