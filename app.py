@@ -1,13 +1,13 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from marshmallow import fields
-
+from flask_restful import Api, Resource
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///test.db'
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+api = Api(app)
 
 
 #### Models ####
@@ -42,14 +42,12 @@ class ContactSchema(ma.Schema):
 contact_schema = ContactSchema()
 contacts_schema = ContactSchema(many=True)
 
-#### CRUD Functionality ####
-#### CRUD - READ / GET ####
-@app.route('/contacts', methods = ['GET'])
-def index():
-    get_contacts = Contact.query.all()
-    contact_schema = ContactSchema(many=True)
-    contacts = contact_schema.dump(get_contacts)
-    return make_response(jsonify({"contact": contacts}))
+class ContactListResource(Resource):
+    def get(self):
+        contacts = Contact.query.all()
+        return contacts_schema.dump(contacts)
+
+api.add_resource(ContactListResource, '/contacts')
 
 
 if __name__ == '__main__':
