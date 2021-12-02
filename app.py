@@ -1,15 +1,16 @@
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
-from marshmallow_sqlalchemy import ModelSchema
+from flask_marshmallow import Marshmallow
 from marshmallow import fields
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://sql4455717:Sa8jeBNmvl@sql4.freemysqlhosting.net:3306/sql4455717'
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///test.db'
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 
 
-###Models####
+#### Models ####
 class Contact(db.Model):
     __tablename__ = "contacts"
     id = db.Column(db.Integer, primary_key=True)
@@ -31,12 +32,25 @@ class Contact(db.Model):
         return '' % self.id
 db.create_all()
 
-class ContactSchema(ModelSchema):
-    class Meta(ModelSchema.Meta):
+
+#### Model Schema ####
+class ContactSchema(ma.Schema):
+    class Meta():
         model = Contact
-        sqla_session = db.session
-    id = fields.Number(dump_only=True)
-    first_name = fields.String(required=True)
-    last_name = fields.String(required=True)
-    email = fields.String(required=True)
-    phone_number = fields.String(required=True)
+        fields = ('id', 'first_name', 'last_name', 'email', 'phone_number')
+
+contact_schema = ContactSchema()
+contacts_schema = ContactSchema(many=True)
+
+#### CRUD Functionality ####
+#### CRUD - READ / GET ####
+@app.route('/contacts', methods = ['GET'])
+def index():
+    get_contacts = Contact.query.all()
+    contact_schema = ContactSchema(many=True)
+    contacts = contact_schema.dump(get_contacts)
+    return make_response(jsonify({"contact": contacts}))
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
