@@ -75,6 +75,12 @@ class ContactResource(Resource):
 
         db.session.commit()
         return contact_schema.dump(contact)
+    
+    def delete(self, contact_id):
+        contact = Contact.query.get_or_404(contact_id)
+        db.session.delete(contact)
+        db.session.commit()
+        return '', 204
 
 api.add_resource(ContactResource, '/contacts/<int:contact_id>')
 
