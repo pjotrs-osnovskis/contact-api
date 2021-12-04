@@ -92,7 +92,7 @@ def get_contact_by_id(contact_id):
 
 
 #### CRUD - ADD (CREATE) ####
-def post():
+def add_contact():
     new_contact = Contact(
         first_name=request.json['first_name'],
         last_name=request.json['last_name'],
@@ -130,10 +130,12 @@ def delete(contact_id):
 
 
 ######### API ROUTES #########
+
 #### CRUD - GET (READ) ####
 @app.route('/api/contacts', methods=['GET'])
 def api_get_contacts():
     return jsonify(get_contacts())
+
 
 #### CRUD - GET BY ID (READ) ####
 @app.route('/api/contacts/<contact_id>', methods=['GET'])
@@ -141,6 +143,11 @@ def api_get_contact(contact_id):
     return jsonify(get_contact_by_id(contact_id))
 
 
+#### CRUD - ADD (CREATE) ####
+@app.route('/api/contacts/add',  methods = ['POST'])
+def api_add_contact():
+    contact = request.get_json()
+    return jsonify(add_contact(contact))
 
 if __name__ == '__main__':
     app.run(debug=False)
