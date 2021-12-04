@@ -33,20 +33,27 @@ elif option == "3":
     db.session.add(contact)
     db.session.commit()
 
-# elif option == "4":
-#     selected_id = input("Enter contact ID to UPDATE: ")
-#     contact = Contact.query.get_or_404(selected_id)
-#     print("Fist Name: " + contact.first_name)
-#     print("Last Name: " + contact.last_name)
-#     print("Email: " + contact.email)
-#     print("Phone Number: " + contact.phone_number)
-    # f_name = input("Enter First Name: ")
-    # l_name = input("Enter Last Name: ")
-    # email = input("Enter Email: ")
-    # phone_nr = input("Enter Phone Number: ")
-    # updated_contact = Contact(first_name=f_name, last_name=l_name, email=email, phone_number=phone_nr)
-    # db.session.update(updated_contact)
-    # db.session.commit()
+elif option == "4":
+    selected_id = input("Enter contact ID to UPDATE: ")
+    contact = Contact.query.get_or_404(selected_id)
+    if selected_id == str(contact.id):
+        print("Selected contact: ")
+        print("Fist Name: " + contact.first_name)
+        print("Last Name: " + contact.last_name)
+        print("Email: " + contact.email)
+        print("Phone Number: " + contact.phone_number)
+        print("")
+        print("Enter new information:")
+        contact.first_name = input("Enter First Name: ")
+        contact.last_name = input("Enter Last Name: ")
+        contact.email = input("Enter Email: ")
+        contact.phone_number = input("Enter Phone Number: ")
+        db.session.commit()
+        print("")
+        print("Update Successful!")
+    else:
+        print("Contact not found!")
+
 
 elif option == "5":
     selected_id = input("Enter contact ID to DELETE: ")
