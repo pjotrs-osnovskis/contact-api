@@ -1,9 +1,8 @@
 from enum import unique
-from flask import Flask, request
+from flask import Flask, request, jsonify 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates 
 from flask_marshmallow import Marshmallow
-from marshmallow import fields, ValidationError
 from flask_restful import Api, Resource
 import os
 if os.path.exists("env.py"):
@@ -79,57 +78,69 @@ class ContactSchema(ma.Schema):
 contact_schema = ContactSchema()
 contacts_schema = ContactSchema(many=True)
 
-class ContactListResource(Resource):
-    #### CRUD - GET (READ) ####
-    def get(self):
-        contacts = Contact.query.all()
-        return contacts_schema.dump(contacts)
 
-    #### CRUD - ADD (CREATE) ####
-    def post(self):
-        new_contact = Contact(
-            first_name=request.json['first_name'],
-            last_name=request.json['last_name'],
-            email=request.json['email'],
-            phone_number=request.json['phone_number']
-        )
-        db.session.add(new_contact)
-        db.session.commit()
-        return contact_schema.dump(new_contact)
-
-api.add_resource(ContactListResource, '/contacts')
+#### CRUD - GET (READ) ####
+def get_contacts():
+    contacts = Contact.query.all()
+    return contacts_schema.dump(contacts)
 
 
-class ContactResource(Resource):
-    """ Fetching a single record by ID """
-    def get(self, contact_id):
-        contact = Contact.query.get_or_404(contact_id)
-        return contact_schema.dump(contact)
+#### CRUD - GET BY ID (GET) ####
+def get_contact_by_id(contact_id):
+    contact = Contact.query.get_or_404(contact_id)
+    return contact_schema.dump(contact)
 
-    #### CRUD - PATCH (UPDATE) ####
-    def patch(self, contact_id):
-        contact = Contact.query.get_or_404(contact_id)
 
-        if 'first_name' in request.json:
-            contact.first_name = request.json['first_name']
-        if 'last_name' in request.json:
-            contact.last_name = request.json['last_name']
-        if 'email' in request.json:
-            contact.email = request.json['email']
-        if 'phone_number' in request.json:
-            contact.phone_number = request.json['phone_number']
+#### CRUD - ADD (CREATE) ####
+def post():
+    new_contact = Contact(
+        first_name=request.json['first_name'],
+        last_name=request.json['last_name'],
+        email=request.json['email'],
+        phone_number=request.json['phone_number']
+    )
+    db.session.add(new_contact)
+    db.session.commit()
+    return contact_schema.dump(new_contact)
 
-        db.session.commit()
-        return contact_schema.dump(contact)
 
-    #### CRUD - DELETE (DELETE) ####
-    def delete(self, contact_id):
-        contact = Contact.query.get_or_404(contact_id)
-        db.session.delete(contact)
-        db.session.commit()
-        return '', 204
+#### CRUD - PATCH (UPDATE) ####
+def patch(contact_id):
+    contact = Contact.query.get_or_404(contact_id)
 
-api.add_resource(ContactResource, '/contacts/<int:contact_id>')
+    if 'first_name' in request.json:
+        contact.first_name = request.json['first_name']
+    if 'last_name' in request.json:
+        contact.last_name = request.json['last_name']
+    if 'email' in request.json:
+        contact.email = request.json['email']
+    if 'phone_number' in request.json:
+        contact.phone_number = request.json['phone_number']
+
+    db.session.commit()
+    return contact_schema.dump(contact)
+
+
+#### CRUD - DELETE (DELETE) ####
+def delete(contact_id):
+    contact = Contact.query.get_or_404(contact_id)
+    db.session.delete(contact)
+    db.session.commit()
+    return '', 204
+
+
+######### API ROUTES #########
+#### CRUD - GET (READ) ####
+@app.route('/api/contacts', methods=['GET'])
+def api_get_contacts():
+    return jsonify(get_contacts())
+
+#### CRUD - GET BY ID (READ) ####
+@app.route('/api/contacts/<contact_id>', methods=['GET'])
+def api_get_contact(contact_id):
+    return jsonify(get_contact_by_id(contact_id))
+
+
 
 if __name__ == '__main__':
     app.run(debug=False)
