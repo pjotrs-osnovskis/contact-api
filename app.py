@@ -123,7 +123,7 @@ def update_contact(contact_id):
 
 
 #### CRUD - DELETE (DELETE) ####
-def delete(contact_id):
+def delete_contact(contact_id):
     contact = Contact.query.get_or_404(contact_id)
     db.session.delete(contact)
     db.session.commit()
@@ -155,6 +155,10 @@ def api_add_contact():
 @app.route('/api/contacts/update/<contact_id>',  methods = ['PUT'])
 def api_update_contact(contact_id):
     return jsonify(update_contact(contact_id))
+
+@app.route('/api/contacts/delete/<contact_id>',  methods = ['DELETE'])
+def api_delete_contact(contact_id):
+    return jsonify(delete_contact(contact_id))
 
 
 if __name__ == '__main__':
