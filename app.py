@@ -2,9 +2,12 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_restful import Api, Resource
-
+import os
+if os.path.exists("env.py"):
+    import env
+    
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("DB_URL")
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 api = Api(app)
