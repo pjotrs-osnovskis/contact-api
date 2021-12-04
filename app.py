@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates 
 from flask_marshmallow import Marshmallow
-from sqlalchemy.orm import validates
 import re
 import os
 if os.path.exists("env.py"):
@@ -125,7 +124,7 @@ def delete_contact(contact_id):
     contact = Contact.query.get_or_404(contact_id)
     db.session.delete(contact)
     db.session.commit()
-    return '', 204
+    return 'Contact Deleted', 204
 
 
 ######### API ROUTES #########
