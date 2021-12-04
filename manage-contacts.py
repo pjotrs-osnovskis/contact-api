@@ -14,13 +14,13 @@ if option == "1":
 
 elif option == "2":
     selected_id = input("Enter contact ID to view: ")
-    contact = Contact.query.get_or_404(selected_id)
-    if selected_id == str(contact.id):
+    try:
+        contact = Contact.query.get(selected_id)
         print("Fist Name: " + contact.first_name)
         print("Last Name: " + contact.last_name)
         print("Email: " + contact.email)
         print("Phone Number: " + contact.phone_number)
-    else:
+    except:
         print("Contact not found!")
 
 elif option == "3":
@@ -35,8 +35,8 @@ elif option == "3":
 
 elif option == "4":
     selected_id = input("Enter contact ID to UPDATE: ")
-    contact = Contact.query.get_or_404(selected_id)
-    if selected_id == str(contact.id):
+    try:
+        contact = Contact.query.get_or_404(selected_id)
         print("Selected contact: ")
         print("Fist Name: " + contact.first_name)
         print("Last Name: " + contact.last_name)
@@ -51,7 +51,7 @@ elif option == "4":
         db.session.commit()
         print("")
         print("Update Successful!")
-    else:
+    except:
         print("Contact not found!")
 
 
