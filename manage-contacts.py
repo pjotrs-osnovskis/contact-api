@@ -1,5 +1,4 @@
 from app import Contact, db, contacts_schema
-from flask import request
 
 print("1 to VIEW ALL contacts")
 print("2 to SHOW contact by ID")
@@ -57,7 +56,14 @@ elif option == "4":
 
 elif option == "5":
     selected_id = input("Enter contact ID to DELETE: ")
-    contact = Contact.query.get_or_404(selected_id)
-    db.session.delete(contact)
-    db.session.commit()
-    print(f'Contact {contact.first_name} deleted')
+    try:
+        contact = Contact.query.get_or_404(selected_id)
+        db.session.delete(contact)
+        db.session.commit()
+        print(f'Contact {contact.first_name} deleted')
+    except:
+        print("Contact not found!")
+
+else:
+    print("Wrong option selected.")
+
