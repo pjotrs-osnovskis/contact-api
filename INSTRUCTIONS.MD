@@ -7,7 +7,7 @@
 
 Easiest way to create virtual environment is yo use **venv**.
 In your terminal cd to app's path and run next command:
-`python -m venv venv`.
+`python -m venv venv`. Then run `pip3 install -r requirements.txt` in your shell to install all necessary libraries and frameworks.
 
 To activate it run `venv\Scripts\activate.bat`, to deactivate, simply type `deactivate` in terminal prompt.
 
