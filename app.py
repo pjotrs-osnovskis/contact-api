@@ -92,16 +92,17 @@ def get_contact_by_id(contact_id):
 
 
 #### CRUD - ADD (CREATE) ####
-def add_contact():
-    new_contact = Contact(
-        first_name=request.json['first_name'],
-        last_name=request.json['last_name'],
-        email=request.json['email'],
-        phone_number=request.json['phone_number']
+def add_contact(contact):
+    contact = Contact(
+        first_name=request.args['first_name'],
+        last_name=request.args['last_name'],
+        email=request.args['email'],
+        phone_number=request.args['phone_number']
     )
-    db.session.add(new_contact)
+
+    db.session.add(contact)
     db.session.commit()
-    return contact_schema.dump(new_contact)
+    return contact_schema.dump(contact)
 
 
 #### CRUD - PATCH (UPDATE) ####
@@ -149,5 +150,9 @@ def api_add_contact():
     contact = request.get_json()
     return jsonify(add_contact(contact))
 
+
+
+
+
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
