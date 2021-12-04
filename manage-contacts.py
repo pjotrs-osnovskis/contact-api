@@ -13,13 +13,18 @@ def mainmenu():
 
     if option == "1":
         contacts = contacts_schema.dump(Contact.query.all())
-        for c in contacts:
+        if len(contacts) == 0:
             print("")
-            print(f"Name: {c['first_name']} {c['last_name']}")
-            print(f"Email: {c['email']}")
-            print(f"Phone number: {c['phone_number']}")
-            print(f"ID: {c['id']}")
-        mainmenu()
+            print("There are no contacts!")
+            mainmenu()
+        else:
+            for c in contacts:
+                print("")
+                print(f"Name: {c['first_name']} {c['last_name']}")
+                print(f"Email: {c['email']}")
+                print(f"Phone number: {c['phone_number']}")
+                print(f"ID: {c['id']}")
+            mainmenu()
 
     elif option == "2":
         selected_id = input("Enter contact ID to view: ")
