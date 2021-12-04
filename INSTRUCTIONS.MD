@@ -1,8 +1,18 @@
 # INSTRUCTIONS FOR CONTACT-API
 
+## CREATING A DATABASE
+
+Quickest way to create a local database is to set environment variable **"DB_URL"** to `sqlite3.connect('database.db')`. Make sure you `pip3 install sqlite3` in terminal and `import sqlite3` at top of your app file.
+
+##  ACCESS DATABASE VIA URL
+
+To access database records run `python app.py`, then visit [http://127.0.0.1:5000/contacts](http://127.0.0.1:5000/contacts).
+
+
 ## TERMINAL PROGRAM
 
-Please run manage-contacts.py to Create, Read, Update and Delete contacts.
+Run `python manage-contacts.py` to Create, Read, Update and Delete contacts via terminal program.
+
 
 ## CMD
 
