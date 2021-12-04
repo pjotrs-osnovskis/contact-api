@@ -3,12 +3,13 @@ from app import Contact, db, contacts_schema
 print("1 to view all contacts")
 print("2 to create a contact")
 print("3 to delete by ID")
-print("")
-print("")
+print("4 to update by ID")
 option = input("Select option: ")
 
 if option == "1":
-    print("You have selected option 1")
+    contacts = Contact.query.all()
+    print(contacts_schema.dump(contacts))
+
 elif option == "2":
     f_name = input("Enter First Name: ")
     l_name = input("Enter Last Name: ")
@@ -18,6 +19,7 @@ elif option == "2":
     contact = Contact(first_name=f_name, last_name=l_name, email=email, phone_number=phone_nr)
     db.session.add(contact)
     db.session.commit()
+    
 elif option == "3":
     selected_id = input("Enter selected id to delete: ")
     contact = Contact.query.get_or_404(selected_id)
