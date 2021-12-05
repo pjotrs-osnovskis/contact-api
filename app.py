@@ -61,9 +61,6 @@ class Contact(db.Model):
             raise AssertionError('(E2) Enter correct phone number, following inner UK standard (07) or International (0044)') 
 
         return phone_number
-
-    def __repr__(self):
-        return '' % self.id
 db.create_all()
 
 
